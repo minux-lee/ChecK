@@ -1,47 +1,98 @@
-# Setup Guide
+# SCALES: Generative Audio Ensemble
 
-## 1. Prerequisites
+> **"The collision of agents becomes the coincidence of rhythm."**
 
-### Git
-- Download and install Git from [git-scm.com](https://git-scm.com/).
+**SCALES** is a Generative Music System that reimagines the classic rules of the Snake game. The title embodies a double meaning: the **reptilian scales** that form the snake's body, and the **musical scales** that form the ensemble's harmony.
 
-### Node.js and npm
-- Download and install Node.js from [nodejs.org](https://nodejs.org/).
+Going beyond simple win/loss mechanics, this project transforms the interplay of chance and order created by players and AI into a unique auditory experience.
 
-### Register an account on GitHub.
-- Create a GitHub account at [github.com](https://github.com/).
-- Add your SSH public key to your GitHub account.
-  - Guide: [Adding a new SSH key to your GitHub account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+🔗 **[Play Live Demo](https://minux-lee.github.io/Scales/)**
 
-### Request Access to the Repository
-- Contact me.
+## 💡 Motivation & Concept
 
-## 2. Clone the Repository
+**"Controlled Randomness: The Multi-Agent Ensemble"**
 
-- At the terminal:
-```powershell
-git clone git@github.com:minux-lee/ChecK.git
-```
+Traditional music production often relies on static, repetitive loops. SCALES challenges this determinism by introducing **Controlled Randomness** into the composition process.
 
-- Navigate into the project directory:
-```powershell
-cd ChecK
-```
+The system allows multiple instances of the same instrument to run simultaneously across different boards, creating a layered, polyphonic texture. Whether driven by the pathfinding logic of an **AI Agent** or the spontaneous reactions of a **Human Player**, each board generates a unique, non-linear pattern.
 
-- Open in VS Code:
-```powershell
-code .
-```
+## 🎹 Musical Logic Implementation
 
-## 3. Install Dependencies
+Each snake is not just a game object, but an instrument. Position values `(x, y)` are converted into audio parameters in real-time.
 
-- At the terminal:
-```powershell
+| Role | Instrument | Description | Musical Logic (Formula) |
+|------|------------|-------------|-------------------------|
+| **BASS** | Synth Bass | Provides the musical foundation. Lower Y positions trigger deeper bass notes. | `Scale Index = (GRID_SIZE - 1 - Y)` |
+| **PAD** | Ambient Harmony | Fills the harmony. Cycles through 4 chord progressions based on the X-axis region. | `Chord Index = floor(X / 2) % 4` |
+| **LEAD** | Lead Synth | Plays the melody. Creates dynamic pitch changes using diagonal movement (X/Y combo). | `Note = Base + X + (GRID_SIZE - Y)` |
+| **PERC** | Rhythm | Provides the rhythm. Triggered (Kick/Snare) when touching the top or bottom walls. | `Trigger if Y === 0` or `Y === GRID_SIZE - 1` |
+
+## 🧠 AI Architecture: DQN Agent
+
+The AI Agent is powered by a **Deep Q-Network (DQN)** that runs entirely in the browser using TensorFlow.js. It makes decisions every 500ms based on its immediate surroundings.
+
+### 1. Observation Space (The Inputs)
+The neural network receives a vector of **11 boolean values** representing the snake's **relative** perception. It does not see the entire grid.
+* **[0-2]** Danger (Straight, Right, Left)
+* **[3-6]** Current Direction (Left, Right, Up, Down)
+* **[7-10]** Food Location (Left, Right, Up, Down)
+
+### 2. Neural Network Structure
+A concise Dense Neural Network optimized for real-time web inference.
+* **Input Layer**: Shape (11,)
+* **Dense Layer**: 256 Units (ReLU)
+* **Dropout**: Rate 0.2
+* **Dense Layer**: 256 Units (ReLU)
+* **Output Layer**: 3 Units (Actions)
+
+### 3. Action Space
+The model outputs 3 Q-values. The system selects the action with the highest value (ArgMax). Actions are **relative** to the snake's current head direction:
+* **Action 0**: Go Straight
+* **Action 1**: Turn Right (Clockwise)
+* **Action 2**: Turn Left (Counter-Clockwise)
+
+## 🛠 Tech Stack & Engineering
+
+### Core & Frontend
+* **React 18 & TypeScript**: Logic structure and type safety.
+* **Vite**: Fast build tooling.
+* **Tailwind CSS**: Styling and UI components.
+* **Optimization**: Optimized React's reconciliation process for high-performance rendering.
+
+### State & Audio
+* **Zustand**: Maintains perfect **500ms Tick Sync** between 4 game loops and the audio engine using transient updates.
+* **WebChucK**: Web-based ChucK compiler for real-time sound synthesis.
+* **Web Audio API**: Audio context management.
+
+### AI & Learning
+* **TensorFlow.js**: Inferences the pre-trained model directly in the browser.
+* **Python (Gymnasium)**: Environment used for training the original DQN model.
+
+## 📦 Installation & Usage
+
+### 1. Prerequisites
+* Node.js (v18+)
+* Python 3.9+ (Optional: Only required for retraining the model)
+
+### 2. Setup & Run
+```bash
+git clone [https://github.com/minux-lee/Scales.git](https://github.com/minux-lee/Scales.git)
+cd Scales
 npm install
-```
-
-## 4. Run the Application
-- At the terminal:
-```powershell
 npm run dev
 ```
+
+### 3. Retraining the Model (Optional)
+The project includes a pre-trained model in `public/models/`. To retrain:
+
+```bash
+# Install Python dependencies
+pip install tensorflow gymnasium numpy tensorflowjs
+
+# Run training script
+python train_snake.py
+```
+
+## 👥 Credits
+Designed & Engineered by [minux-lee](https://github.com/minux-lee) & [siu1031](https://github.com/siu1031).
+- License: MIT
