@@ -22,14 +22,14 @@ while(true) {
 
     // === Beat 2 ===
     // Snare (Perc 1) + Bass (Do)
-    spork ~ inst.playPerc(1);
+    spork ~ inst.playPerc(2);
     spork ~ inst.playBass(48);
     
     Global.quarter => now;
 
     // === Beat 3 ===
     // Kick (Perc 0) + Bass (Sol) + Lead Melody
-    spork ~ inst.playPerc(0);
+    spork ~ inst.playPerc(1);
     spork ~ inst.playBass(55);      // MIDI 55 = G3
     spork ~ inst.playLead(72);      // MIDI 72 = C5 (High Note)
     
@@ -37,7 +37,7 @@ while(true) {
 
     // === Beat 4 ===
     // Snare (Perc 1) + Bass (Sol)
-    spork ~ inst.playPerc(1);
+    spork ~ inst.playPerc(2);
     spork ~ inst.playBass(55);
     
     Global.quarter => now;

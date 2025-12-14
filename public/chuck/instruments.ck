@@ -45,6 +45,9 @@ public class Instruments {
         SqrOsc osc => LPF lpf => ADSR env => NRev rev => dac;
         SinOsc lfo => blackhole;
 
+        8.0 => lfo.freq;
+        7.0 => float depth;
+
         2000.0 => lpf.freq;
 
         0.15 => rev.mix;
@@ -55,27 +58,33 @@ public class Instruments {
         0.2 => osc.gain;
         
         env.keyOn();
-        Global.quarter/2.0 => now;
+        for(0=>int i; i<50; i++){
+            freq + lfo.last()*depth => osc.freq;
+            Global.quarter/100.0=>now;
+        }
         env.keyOff();
-        Global.quarter*2 => now;
+        for(0=>int i; i<200; i++){
+            freq + lfo.last()*depth => osc.freq;
+            Global.quarter/100.0=>now;
+        }
     }
 
     fun void playPerc(int type) {
         <<< "Playing Percussion Type: " + type >>>;
+        SndBuf buffer => NRev rev => dac;
+        0.05 => rev.mix;
         if(type == 0) {
-            SinOsc osc => ADSR env => dac;
-            env.set(2::ms, 50::ms, 0.0, 10::ms);
-            60.0 => osc.freq;
-            env.keyOn();
-            100::ms => now;
+            "./drums/808 Kick.wav" => buffer.read;
         }
         else if(type == 1) {
-            Noise n => LPF f => ADSR env => dac;
-            1200 => f.freq;
-            env.set(2::ms, 80::ms, 0.0, 10::ms);
-            0.4 => n.gain;
-            env.keyOn();
-            100::ms => now;
+            "./drums/808 snare.wav" => buffer.read;
         }
+        else if(type == 2) {
+            "./drums/808 CH.wav" => buffer.read;
+        }
+        buffer.samples() => buffer.pos;
+        0 => buffer.pos;
+        0.3 => buffer.gain;
+        buffer.length() + 0.5::second => now;
     }
 }
