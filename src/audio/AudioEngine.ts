@@ -15,7 +15,10 @@ class AudioEngine {
             await Promise.all([
                 this.chuck.loadFile('./chuck/global.ck'),
                 this.chuck.loadFile('./chuck/instruments.ck'),
-                this.chuck.loadFile('./chuck/main.ck')
+                this.chuck.loadFile('./chuck/main.ck'),
+                this.chuck.loadFile('./chuck/drums/808 Kick.wav'),
+                this.chuck.loadFile('./chuck/drums/808 snare.wav'),
+                this.chuck.loadFile('./chuck/drums/808 CH.wav')
             ]);
 
             this.chuck.runFile('global.ck');
