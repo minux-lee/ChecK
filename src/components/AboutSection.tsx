@@ -69,35 +69,38 @@ export const AboutSection: React.FC = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                         <div className="space-y-4 text-slate-300 leading-relaxed">
                             <p>
-                                <strong className="text-white">"One Screen, Multiple Boards."</strong><br />
-                                The typical Snake game is a solitary experience. This project began with the question: "What if multiple games ran simultaneously in one space?"
+                                <strong className="text-white">"Controlled Randomness: The Multi-Agent Ensemble"</strong><br />
+                                Traditional music production often relies on static, repetitive loops. SCALES challenges this determinism by introducing <strong>Controlled Randomness</strong> into the composition process.
                             </p>
                             <p>
-                                The goal is to create a musical ensemble where four agents with different speeds and patterns interact. We designed a unique algorithm that translates Grid coordinates into MIDI Notes and collision events into Rhythms.
+                                The system allows multiple instances of the same instrument to run simultaneously across different boards, creating a layered, polyphonic texture. Whether driven by the pathfinding logic of an <strong>AI Agent</strong> or the spontaneous reactions of a <strong>Human Player</strong>, each board generates a unique, non-linear pattern.
+                            </p>
+                            <p className="text-slate-400 italic text-sm border-l-2 border-slate-700 pl-3 mt-4">
+                                "The collision of agents becomes the coincidence of rhythm."
                             </p>
                         </div>
                         <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 flex flex-col justify-center gap-4">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">V</div>
                                 <div>
-                                    <div className="text-white font-bold">Visual Feedback</div>
-                                    <div className="text-xs text-slate-500">Real-time Reactive Rendering</div>
+                                    <div className="text-white font-bold">Multi-Agent System</div>
+                                    <div className="text-xs text-slate-500">Parallel Execution Environment</div>
                                 </div>
                             </div>
                             <div className="w-0.5 h-6 bg-slate-800 ml-5"></div>
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">A</div>
                                 <div>
-                                    <div className="text-white font-bold">Audio Synthesis</div>
-                                    <div className="text-xs text-slate-500">WebChucK DSP Engine</div>
+                                    <div className="text-white font-bold">Generative Audio</div>
+                                    <div className="text-xs text-slate-500">Polyphonic Texture Synthesis</div>
                                 </div>
                             </div>
                             <div className="w-0.5 h-6 bg-slate-800 ml-5"></div>
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">I</div>
                                 <div>
-                                    <div className="text-white font-bold">Intelligence</div>
-                                    <div className="text-xs text-slate-500">Reinforcement Learning Agents</div>
+                                    <div className="text-white font-bold">Hybrid Control</div>
+                                    <div className="text-xs text-slate-500">Human-AI Collaboration</div>
                                 </div>
                             </div>
                         </div>
