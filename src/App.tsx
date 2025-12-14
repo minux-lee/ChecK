@@ -92,14 +92,14 @@ function App() {
                 </div>
 
                 <div className="flex flex-col items-center gap-6 z-10">
-                    <div className="flex gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
+                    <div className="flex flex-wrap justify-center gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800 max-w-full">
                         <span className="px-3 py-2 text-slate-500 text-xs font-bold self-center">ADD:</span>
                         {(['BASS', 'PAD', 'LEAD', 'PERC'] as Role[]).map(role => (
                             <button
                                 key={role}
                                 onClick={() => addSnake(role)}
                                 className={clsx(
-                                    "px-4 py-2 text-xs font-bold rounded hover:scale-105 transition-all active:scale-95 border border-slate-700",
+                                    "whitespace-nowrap px-3 py-2 text-xs font-bold rounded hover:scale-105 transition-all active:scale-95 border border-slate-700",
                                     role === 'BASS' ? "text-blue-400 hover:bg-blue-900/30" :
                                         role === 'PAD' ? "text-purple-400 hover:bg-purple-900/30" :
                                             role === 'LEAD' ? "text-red-400 hover:bg-red-900/30" :
