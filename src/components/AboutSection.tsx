@@ -163,26 +163,26 @@ export const AboutSection: React.FC = () => {
                         <RoleCard
                             role="BASS"
                             color="text-blue-400"
-                            desc="Provides the musical foundation. Lower Y positions trigger deeper bass notes."
-                            logic="Scale Index = (GRID_SIZE - 1 - Y)"
+                            desc="The 64 cells are divided into four quadrants. Plays A, C#, and E notes based on the snake's quadrant. As the snake gets longer, the sustain gain increases."
+                            logic="Quadrant Check (x < 4, y < 4)"
                         />
                         <RoleCard
                             role="PAD (HARMONY)"
                             color="text-purple-400"
-                            desc="Fills the harmony. Cycles through 4 chord progressions based on the X-axis region."
-                            logic="Chord Index = floor(X / 2) % 4"
+                            desc="Cycles through 5 dyad chords (A add b9) based on the sum of X and Y. The length of the snake connects to the detune level of the union."
+                            logic="Chord Index = (x + y) % 5"
                         />
                         <RoleCard
                             role="LEAD (MELODY)"
                             color="text-red-400"
-                            desc="Plays the melody. Creates dynamic pitch changes using a combination of X and Y coordinates to account for diagonal movement."
-                            logic="Note = Base + X + (GRID_SIZE - Y)"
+                            desc="Notes from an Arabic scale are played based on the x-y coordinates, evoking a snake-charming flute. As the snake gets longer, the reverb level increases."
+                            logic="Note = Base + X + (GRID - Y) - 1"
                         />
                         <RoleCard
                             role="PERC (RHYTHM)"
                             color="text-emerald-400"
-                            desc="Provides the rhythm. Triggered (Kick/Snare) when touching the top or bottom walls of the grid."
-                            logic="Trigger if Y === 0 or Y === GRID_SIZE - 1"
+                            desc="Arranges an 808 Hi-hat after a Kick or Snare. Kick/Snare alternates when moving straight. As the snake gets longer, the reverb mix increases."
+                            logic="(x + y) % 2 & (x - y) % 4"
                         />
                     </div>
                 </div>

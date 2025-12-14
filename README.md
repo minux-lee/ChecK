@@ -18,14 +18,14 @@ The system allows multiple instances of the same instrument to run simultaneousl
 
 ## 🎹 Musical Logic Implementation
 
-Each snake is not just a game object, but an instrument. Position values `(x, y)` are converted into audio parameters in real-time.
+Each snake acts as an instrument where position `(x, y)` determines the pitch, and the **body length** modulates audio effects.
 
-| Role | Instrument | Description | Musical Logic (Formula) |
-|------|------------|-------------|-------------------------|
-| **BASS** | Synth Bass | Provides the musical foundation. Lower Y positions trigger deeper bass notes. | `Scale Index = (GRID_SIZE - 1 - Y)` |
-| **PAD** | Ambient Harmony | Fills the harmony. Cycles through 4 chord progressions based on the X-axis region. | `Chord Index = floor(X / 2) % 4` |
-| **LEAD** | Lead Synth | Plays the melody. Creates dynamic pitch changes using diagonal movement (X/Y combo). | `Note = Base + X + (GRID_SIZE - Y)` |
-| **PERC** | Rhythm | Provides the rhythm. Triggered (Kick/Snare) when touching the top or bottom walls. | `Trigger if Y === 0` or `Y === GRID_SIZE - 1` |
+| Role | Instrument | Description & Effect Modulation | Musical Logic (Formula) |
+|------|------------|---------------------------------|-------------------------|
+| **BASS** | Synth Bass | **Quadrants**: Plays A, C#, and E notes based on the 4 quadrants of the grid. <br> *Effect: Length increases Sustain Gain.* | `Quadrant Check (x < 4, y < 4)` |
+| **PAD** | Ambient Pad | **Harmonic Zoning**: Cycles through 5 dyad chords (A add b9 context) based on the sum of X and Y. <br> *Effect: Length increases Oscillator Detune.* | `Chord Index = (X + Y) % 5` |
+| **LEAD** | Lead Synth | **Arabic Scale**: Plays melody notes from an Arabic scale using diagonal coordinates. <br> *Effect: Length increases Reverb Level.* | `Note = Base + X + (GRID - Y) - 1` |
+| **PERC** | Rhythm | **Parity Rhythm**: Alternates Kick/Snare with Hi-hats based on coordinate parity patterns. <br> *Effect: Length increases Reverb Mix.* | `(X + Y) % 2` & `(X - Y) % 4` |
 
 ## 🧠 AI Architecture: DQN Agent
 
