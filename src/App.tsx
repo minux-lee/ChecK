@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import clsx from 'clsx';
 import { useGameStore } from './store/useStore';
 import { Board } from './components/Board';
+import { AboutSection } from './components/AboutSection';
 import { loadModel } from './ai/AIController';
 import type { Role } from './game/types';
 
@@ -62,57 +63,68 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-8">
-            <header className="mb-8 text-center">
-                <h1 className="text-4xl font-black tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-emerald-400 mb-2">
-                    POLYPHONIC SNAKE
-                </h1>
-                <p className="text-slate-400 text-sm">DYNAMIC ENSEMBLE SYSTEM</p>
-            </header>
+        <div className="bg-slate-950 min-h-screen">
+            <div className="min-h-screen flex flex-col items-center justify-center p-8 relative">
+                <header className="mb-8 text-center">
+                    <h1 className="text-4xl font-black tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-emerald-400 mb-2">
+                        POLYPHONIC SNAKE
+                    </h1>
+                    <p className="text-slate-400 text-sm">DYNAMIC ENSEMBLE SYSTEM</p>
+                </header>
 
-            <div className="flex flex-wrap justify-center gap-8 mb-12 max-w-7xl">
-                {snakes.map((snake) => (
-                    <Board
-                        key={snake.id}
-                        snake={snake}
-                        gridSize={gridSize}
-                        onToggleType={() => togglePlayerType(snake.id)}
-                        onRemove={() => removeSnake(snake.id)}
-                        controls={getControlsLabel(snake.id, snake.type)}
-                    />
-                ))}
-            </div>
-
-            <div className="flex flex-col items-center gap-6">
-
-                <div className="flex gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
-                    <span className="px-3 py-2 text-slate-500 text-xs font-bold self-center">ADD:</span>
-                    {(['BASS', 'PAD', 'LEAD', 'PERC'] as Role[]).map(role => (
-                        <button
-                            key={role}
-                            onClick={() => addSnake(role)}
-                            className={clsx(
-                                "px-4 py-2 text-xs font-bold rounded hover:scale-105 transition-all active:scale-95 border border-slate-700",
-                                role === 'BASS' ? "text-blue-400 hover:bg-blue-900/30" :
-                                    role === 'PAD' ? "text-purple-400 hover:bg-purple-900/30" :
-                                        role === 'LEAD' ? "text-red-400 hover:bg-red-900/30" :
-                                            "text-emerald-400 hover:bg-emerald-900/30"
-                            )}
-                        >
-                            + {role}
-                        </button>
+                <div className="flex flex-wrap justify-center gap-8 mb-12 max-w-7xl">
+                    {snakes.map((snake) => (
+                        <Board
+                            key={snake.id}
+                            snake={snake}
+                            gridSize={gridSize}
+                            onToggleType={() => togglePlayerType(snake.id)}
+                            onRemove={() => removeSnake(snake.id)}
+                            controls={getControlsLabel(snake.id, snake.type)}
+                        />
                     ))}
                 </div>
 
-                <div className="flex gap-4">
-                    <button onClick={togglePlay} className={clsx("px-8 py-3 font-bold rounded shadow-lg transition-all transform hover:scale-105 active:scale-95", isPlaying ? "bg-slate-700 text-slate-300 hover:bg-slate-600" : "bg-white text-slate-900 hover:bg-blue-50")}>
-                        {isPlaying ? 'STOP ENSEMBLE' : 'START ENSEMBLE'}
-                    </button>
-                    <button onClick={reset} className="px-6 py-3 border border-slate-700 text-slate-400 font-bold rounded hover:bg-slate-800 transition">
-                        RESET
-                    </button>
+                <div className="flex flex-col items-center gap-6 z-10">
+                    <div className="flex gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
+                        <span className="px-3 py-2 text-slate-500 text-xs font-bold self-center">ADD:</span>
+                        {(['BASS', 'PAD', 'LEAD', 'PERC'] as Role[]).map(role => (
+                            <button
+                                key={role}
+                                onClick={() => addSnake(role)}
+                                className={clsx(
+                                    "px-4 py-2 text-xs font-bold rounded hover:scale-105 transition-all active:scale-95 border border-slate-700",
+                                    role === 'BASS' ? "text-blue-400 hover:bg-blue-900/30" :
+                                        role === 'PAD' ? "text-purple-400 hover:bg-purple-900/30" :
+                                            role === 'LEAD' ? "text-red-400 hover:bg-red-900/30" :
+                                                "text-emerald-400 hover:bg-emerald-900/30"
+                                )}
+                            >
+                                + {role}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="flex gap-4">
+                        <button onClick={togglePlay} className={clsx("px-8 py-3 font-bold rounded shadow-lg transition-all transform hover:scale-105 active:scale-95", isPlaying ? "bg-slate-700 text-slate-300 hover:bg-slate-600" : "bg-white text-slate-900 hover:bg-blue-50")}>
+                            {isPlaying ? 'STOP ENSEMBLE' : 'START ENSEMBLE'}
+                        </button>
+                        <button onClick={reset} className="px-6 py-3 border border-slate-700 text-slate-400 font-bold rounded hover:bg-slate-800 transition">
+                            RESET
+                        </button>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-8 animate-bounce text-slate-600 flex flex-col items-center gap-2 cursor-pointer"
+                    onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+                    <span className="text-xs font-bold tracking-widest uppercase">About this project</span>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
                 </div>
             </div>
+
+            <AboutSection />
         </div>
     );
 }
