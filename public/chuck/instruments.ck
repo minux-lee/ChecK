@@ -23,15 +23,15 @@ public class Instruments {
         SawOsc osc3 => env;
         
         0.15 => verb.mix;
-        env.set(300::ms, 200::ms, 0.5, 600::ms);
+        env.set(300::ms, 200::ms, 0.5, 300::ms);
 
         1000.0 => lpf.freq;
         
-        Std.mtof(note) => osc1.freq;
+        Std.mtof(note+12) => osc1.freq;
         velocity * 0.15 => osc1.gain;
-        Std.mtof(note+0.1) => osc2.freq;
+        Std.mtof(note+12.2) => osc2.freq;
         velocity * 0.15 => osc2.gain;
-        Std.mtof(note-0.3) => osc3.freq;
+        Std.mtof(note+11.8) => osc3.freq;
         velocity * 0.15 => osc3.gain;
         
         env.keyOn();
@@ -46,19 +46,19 @@ public class Instruments {
         SinOsc lfo => blackhole;
 
         8.0 => lfo.freq;
-        7.0 => float depth;
+        3.0 => float depth;
 
         2000.0 => lpf.freq;
 
         0.15 => rev.mix;
         env.set(5::ms, 80::ms, 1.0, 300::ms);
         
-        Std.mtof(note) => float freq;
+        Std.mtof(note+12) => float freq;
         freq => osc.freq;
-        0.2 => osc.gain;
+        0.1 => osc.gain;
         
         env.keyOn();
-        for(0=>int i; i<50; i++){
+        for(0=>int i; i<90; i++){
             freq + lfo.last()*depth => osc.freq;
             Global.quarter/100.0=>now;
         }
@@ -74,17 +74,17 @@ public class Instruments {
         SndBuf buffer => NRev rev => dac;
         0.05 => rev.mix;
         if(type == 0) {
-            "./drums/808 Kick.wav" => buffer.read;
+            "808 Kick.wav" => buffer.read;
         }
         else if(type == 1) {
-            "./drums/808 snare.wav" => buffer.read;
+            "808 snare.wav" => buffer.read;
         }
         else if(type == 2) {
-            "./drums/808 CH.wav" => buffer.read;
+            "808 CH.wav" => buffer.read;
         }
         buffer.samples() => buffer.pos;
         0 => buffer.pos;
-        0.3 => buffer.gain;
+        0.1 => buffer.gain;
         buffer.length() + 0.5::second => now;
     }
 }
