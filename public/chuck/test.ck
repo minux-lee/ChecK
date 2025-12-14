@@ -4,7 +4,7 @@
 <<< "--- Main Sequencer Started ---" >>>;
 
 // 소리가 너무 크지 않게 마스터 볼륨 조절 (선택 사항)
-0.8 => dac.gain; 
+0.7 => dac.gain; 
 
 Instruments inst;
 
