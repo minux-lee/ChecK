@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
+// --- Small Components ---
 const TechBadge = ({ children }: { children: React.ReactNode }) => (
     <span className="px-3 py-1 text-xs font-mono font-bold text-slate-300 bg-slate-800 rounded-full border border-slate-700">
         {children}
@@ -23,12 +24,29 @@ const RoleCard = ({ role, color, desc, logic }: { role: string, color: string, d
     </div>
 );
 
+const GitHubProfile = ({ username }: { username: string }) => (
+    <a
+        href={`https://github.com/${username}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 px-4 py-2 bg-slate-900 rounded-full border border-slate-800 hover:border-indigo-500 hover:bg-indigo-900/20 transition-all group"
+    >
+        <div className="w-2 h-2 rounded-full bg-slate-500 group-hover:bg-indigo-400 transition-colors" />
+        <span className="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">
+            {username}
+        </span>
+    </a>
+);
+
+// --- Main Component ---
 export const AboutSection: React.FC = () => {
+    const [isAIDetailsOpen, setIsAIDetailsOpen] = useState(false);
+
     return (
         <section className="w-full bg-slate-950 py-24 px-4 border-t border-slate-900">
             <div className="max-w-5xl mx-auto space-y-24">
 
-                {/* Introduction Section */}
+                {/* 1. Introduction */}
                 <div className="text-center space-y-6">
                     <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
                         THE ARCHITECTURE OF <br />
@@ -45,7 +63,7 @@ export const AboutSection: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Motivation Section */}
+                {/* 2. Motivation */}
                 <div>
                     <SectionTitle>💡 Motivation & Concept</SectionTitle>
                     <div className="grid md:grid-cols-2 gap-8">
@@ -86,7 +104,7 @@ export const AboutSection: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Tech Stack Section */}
+                {/* 3. Tech Stack */}
                 <div>
                     <SectionTitle>🛠 Tech Stack & Engineering</SectionTitle>
                     <div className="bg-slate-900 rounded-2xl p-8 border border-slate-800">
@@ -129,7 +147,7 @@ export const AboutSection: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Musical Logic Section */}
+                {/* 4. Musical Logic */}
                 <div>
                     <SectionTitle>🎹 Musical Logic Implementation</SectionTitle>
                     <p className="text-slate-400 mb-8">
@@ -163,53 +181,138 @@ export const AboutSection: React.FC = () => {
                     </div>
                 </div>
 
-                {/* AI Architecture Section */}
+                {/* 5. AI Architecture (Deep Dive) */}
                 <div>
-                    <SectionTitle>🧠 AI Architecture: From Python to Browser</SectionTitle>
+                    <SectionTitle>🧠 AI Architecture: DQN Agent</SectionTitle>
                     <div className="bg-slate-900/30 p-8 rounded-xl border border-slate-800">
-                        <div className="flex flex-col md:flex-row gap-8 items-center">
-                            <div className="flex-1 space-y-4">
-                                <h4 className="text-lg font-bold text-white">The Brain (DQN Agent)</h4>
-                                <p className="text-slate-400 text-sm leading-relaxed">
-                                    The AI Agent perceives the world through 11 sensors.
-                                    It analyzes obstacles (front/back/left/right), current direction, and relative food position to decide the action with the highest expected reward.
-                                </p>
-                                <ul className="space-y-2 mt-4">
-                                    <li className="flex items-center gap-3 text-sm text-slate-300">
-                                        <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                                        Input Layer: 11 Features (Collision Risks, Direction, Food Pos)
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm text-slate-300">
-                                        <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                                        Hidden Layers: Dense(256) → Dropout → Dense(256)
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm text-slate-300">
-                                        <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                                        Output: 3 Discrete Actions (Straight, Turn Left, Turn Right)
-                                    </li>
-                                </ul>
+                        <div className="flex flex-col gap-6">
+                            <div className="flex flex-col md:flex-row gap-8 items-center">
+                                <div className="flex-1 space-y-4">
+                                    <p className="text-slate-400 text-sm leading-relaxed">
+                                        The AI Agent (Deep Q-Network) runs entirely in the browser using TensorFlow.js.
+                                        It was originally trained in Python using Gymnasium and converted for the web.
+                                        The agent makes decisions every 500ms based on the immediate surroundings.
+                                    </p>
+                                    <div className="flex gap-4 mt-4">
+                                        <button
+                                            onClick={() => setIsAIDetailsOpen(!isAIDetailsOpen)}
+                                            className="px-5 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded transition-colors flex items-center gap-2"
+                                        >
+                                            {isAIDetailsOpen ? 'HIDE TECHNICAL DETAILS' : 'READ TECHNICAL DEEP DIVE'}
+                                            <span className={clsx("transition-transform duration-300", isAIDetailsOpen ? "rotate-180" : "rotate-0")}>▼</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 w-full bg-slate-950 p-6 rounded-lg font-mono text-xs text-slate-500 border border-slate-800">
+                                    <div className="text-purple-400 mb-2">// Inference Loop Summary</div>
+                                    <div className="mb-2">1. Get State (11 Booleans)</div>
+                                    <div className="pl-4 text-slate-600">[0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1]</div>
+                                    <div className="mb-2 mt-2">2. Neural Net Forward Pass</div>
+                                    <div className="pl-4 text-slate-600">TensorFlow.js execution...</div>
+                                    <div className="mb-2 mt-2">3. Action Selection (ArgMax)</div>
+                                    <div className="pl-4 text-emerald-400">Action: "TURN_RIGHT"</div>
+                                </div>
                             </div>
-                            <div className="flex-1 w-full bg-slate-950 p-6 rounded-lg font-mono text-xs text-slate-500 border border-slate-800">
-                                <div className="text-purple-400 mb-2">// Inference Loop</div>
-                                <div className="mb-2">1. Get State (Sensors)</div>
-                                <div className="pl-4 text-slate-600">[0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1]</div>
-                                <div className="mb-2 mt-2">2. Model Predict (TensorFlow.js)</div>
-                                <div className="pl-4 text-slate-600">waiting...</div>
-                                <div className="mb-2 mt-2">3. Best Action Selection</div>
-                                <div className="pl-4 text-emerald-400">Action: "TURN_RIGHT"</div>
+
+                            {/* Collapsible Details */}
+                            <div className={clsx(
+                                "grid gap-8 overflow-hidden transition-all duration-500 ease-in-out border-t border-slate-800/50",
+                                isAIDetailsOpen ? "mt-6 pt-6 opacity-100 max-h-[1000px]" : "max-h-0 opacity-0"
+                            )}>
+                                <div className="grid md:grid-cols-2 gap-12">
+                                    <div className="space-y-4">
+                                        <h4 className="text-white font-bold border-l-4 border-indigo-500 pl-3">1. Observation Space (The Inputs)</h4>
+                                        <p className="text-slate-400 text-sm">
+                                            The neural network receives a vector of <strong>11 boolean values</strong> representing the snake's immediate perception. It does not see the entire grid, only relative dangers and targets.
+                                        </p>
+                                        <ul className="space-y-2 text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded border border-slate-800">
+                                            <li className="flex gap-2"><span className="text-red-400">[0-2]</span> Danger (Straight, Right, Left)</li>
+                                            <li className="flex gap-2"><span className="text-blue-400">[3-6]</span> Current Direction (L, R, U, D)</li>
+                                            <li className="flex gap-2"><span className="text-green-400">[7-10]</span> Food Location (L, R, U, D)</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h4 className="text-white font-bold border-l-4 border-purple-500 pl-3">2. Neural Network Structure</h4>
+                                        <p className="text-slate-400 text-sm">
+                                            A concise Dense Neural Network optimized for real-time web inference.
+                                        </p>
+                                        <div className="text-xs text-slate-400 space-y-2 bg-slate-950 p-4 rounded border border-slate-800 font-mono">
+                                            <div className="flex justify-between">
+                                                <span>Input Layer</span>
+                                                <span className="text-slate-500">Shape: (11,)</span>
+                                            </div>
+                                            <div className="flex justify-center text-slate-600">↓</div>
+                                            <div className="flex justify-between">
+                                                <span className="text-white">Dense (Relu)</span>
+                                                <span className="text-indigo-400">256 Units</span>
+                                            </div>
+                                            <div className="flex justify-center text-slate-600">↓</div>
+                                            <div className="flex justify-between">
+                                                <span>Dropout</span>
+                                                <span className="text-slate-500">Rate: 0.2</span>
+                                            </div>
+                                            <div className="flex justify-center text-slate-600">↓</div>
+                                            <div className="flex justify-between">
+                                                <span className="text-white">Dense (Relu)</span>
+                                                <span className="text-indigo-400">256 Units</span>
+                                            </div>
+                                            <div className="flex justify-center text-slate-600">↓</div>
+                                            <div className="flex justify-between">
+                                                <span className="text-emerald-400 font-bold">Output Layer</span>
+                                                <span className="text-emerald-500">3 Units (Actions)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4 md:col-span-2">
+                                        <h4 className="text-white font-bold border-l-4 border-emerald-500 pl-3">3. Action Space & Decision</h4>
+                                        <p className="text-slate-400 text-sm">
+                                            The model outputs 3 values (Q-values). The system selects the action with the highest value (ArgMax).
+                                            Crucially, the actions are <strong>relative</strong> to the snake's current head direction, not absolute coordinates.
+                                        </p>
+                                        <div className="flex flex-wrap gap-4 mt-2">
+                                            <span className="px-3 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">Action 0: Go Straight</span>
+                                            <span className="px-3 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">Action 1: Turn Right (Clockwise)</span>
+                                            <span className="px-3 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">Action 2: Turn Left (Counter-Clockwise)</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                <div className="pt-12 text-center border-t border-slate-900">
-                    <p className="text-slate-500 text-sm">
-                        Designed & Engineered by <span className="text-slate-300 font-bold">You</span>
-                    </p>
-                    <div className="mt-4 flex justify-center gap-4">
-                        <a href="#" className="text-slate-600 hover:text-white transition-colors">GitHub Repository</a>
-                        <span className="text-slate-700">|</span>
-                        <a href="#" className="text-slate-600 hover:text-white transition-colors">Project Documentation</a>
+                {/* 6. Footer & Credits */}
+                <div className="pt-20 pb-8 text-center border-t border-slate-900">
+                    <div className="flex flex-col items-center gap-6">
+                        <div className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
+                            Designed & Engineered by
+                        </div>
+                        <div className="flex gap-4 flex-wrap justify-center">
+                            <GitHubProfile username="minux-lee" />
+                            <GitHubProfile username="siu1031" />
+                        </div>
+
+                        <div className="mt-8 flex items-center gap-2 text-slate-700">
+                            <span className="h-px w-12 bg-slate-800"></span>
+                            <span className="text-xs">SOURCE CODE</span>
+                            <span className="h-px w-12 bg-slate-800"></span>
+                        </div>
+
+                        <a
+                            href="https://github.com/minux-lee/Scales"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 hover:underline"
+                        >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                            </svg>
+                            minux-lee/Scales
+                        </a>
                     </div>
                 </div>
 
