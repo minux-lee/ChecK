@@ -76,7 +76,7 @@ The model outputs 3 Q-values. The system selects the action with the highest val
 
 ### 2. Setup & Run
 ```bash
-git clone [https://github.com/minux-lee/Scales.git](https://github.com/minux-lee/Scales.git)
+git clone https://github.com/minux-lee/Scales.git
 cd Scales
 npm install
 npm run dev
