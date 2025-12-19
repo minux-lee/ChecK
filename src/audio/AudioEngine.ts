@@ -17,7 +17,12 @@ class AudioEngine {
                 this.chuck.loadFile('./chuck/main.ck'),
                 this.chuck.loadFile('./chuck/drums/808 Kick.wav'),
                 this.chuck.loadFile('./chuck/drums/808 snare.wav'),
-                this.chuck.loadFile('./chuck/drums/808 CH.wav')
+                this.chuck.loadFile('./chuck/drums/808 CH.wav'),
+                this.chuck.loadFile('./chuck/orcperc/Cymb.wav'),
+                this.chuck.loadFile('./chuck/orcperc/Tria.wav'),
+                this.chuck.loadFile('./chuck/orcperc/TympC.wav'),
+                this.chuck.loadFile('./chuck/orcperc/TympG.wav'),
+                this.chuck.loadFile('./chuck/orcperc/TympF.wav')
             ]);
 
             this.chuck.runFile('global.ck');
