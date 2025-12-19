@@ -1,15 +1,14 @@
 import { Chuck } from 'webchuck';
+import type { MusicalMode, Role, Direction } from '../game/types';
 
 class AudioEngine {
     public chuck: Chuck | null = null;
     public isReady: boolean = false;
 
-    // 초기화 메서드
     async init() {
         if (this.chuck) return;
 
         try {
-            // WebChucK 초기화
             this.chuck = await Chuck.init([]);
 
             await Promise.all([
@@ -36,26 +35,30 @@ class AudioEngine {
 
     private setupTickListener() {
         if (!this.chuck) return;
-        // Logic placeholder
     }
 
-    // 소리 트리거 메서드들
-    public playBass(note: number, mix: number) {
-        this.runCode(`Instruments inst; inst.playBass(${note},${mix});`);
-    }
-
-    public playPad(notes: number[], mix: number) {
-        notes.forEach(n => {
-            this.runCode(`Instruments inst; inst.playPad(${n}, 0.5,${mix});`);
-        });
-    }
-
-    public playLead(note: number, mix: number) {
-        this.runCode(`Instruments inst; inst.playLead(${note},${mix});`);
-    }
-
-    public playPerc(type: number, mix: number) {
-        this.runCode(`Instruments inst; inst.playPerc(${type},${mix});`);
+    public triggerInstrument(
+        beat: number,
+        mode: MusicalMode,
+        x: number,
+        y: number,
+        inst: Role,
+        dir: Direction,
+        length: number
+    ) {
+        const code = `
+            Instruments inst_obj;
+            inst_obj.onTick(
+                ${beat},
+                "${mode}",
+                ${x},
+                ${y},
+                "${inst}",
+                "${dir}",
+                ${length}
+            );
+        `;
+        this.runCode(code);
     }
 
     public setBPM(bpm: number) {
@@ -63,7 +66,6 @@ class AudioEngine {
     }
 
     private runCode(code: string) {
-        console.log(`[TS -> ChucK] ${code}`);
         if (this.chuck && this.isReady) {
             this.chuck.runCode(code);
         }

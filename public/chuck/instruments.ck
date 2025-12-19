@@ -1,4 +1,8 @@
 public class Instruments {
+
+    fun void onTick(int beatCount, string mode, int x, int y, string instrument, string dir, int length) {
+        <<< "Tick: " + beatCount + " Instrument: " + instrument + " Position: (" + x + "," + y + ") Direction: " + dir + " Length: " + length >>>;
+    }
     
     fun void playBass(float note, int mix) {
         <<< "Playing Bass Note: " + note >>>;

@@ -2,6 +2,7 @@ export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
 export type Point = { x: number; y: number };
 export type PlayerType = 'HUMAN' | 'AI';
 export type Role = 'BASS' | 'PAD' | 'LEAD' | 'PERC';
+export type MusicalMode = 'ARABIC' | 'ORCHESTRAL' | 'EIGHT_BIT' | 'PIANO';
 
 export interface SnakeState {
     id: number;
@@ -22,6 +23,8 @@ export interface GameState {
     snakes: SnakeState[];
     gridSize: number;
     humanOrderIdQueue: number[];
+    musicalMode: MusicalMode;
+    beatCount: number;
 
     togglePlay: () => void;
     setDirection: (id: number, dir: Direction) => void;
@@ -31,4 +34,5 @@ export interface GameState {
 
     addSnake: (role: Role) => void;
     removeSnake: (id: number) => void;
+    setMusicalMode: (mode: MusicalMode) => void;
 }

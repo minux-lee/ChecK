@@ -5,20 +5,22 @@ import { useGameStore } from './store/useStore';
 import { Board } from './components/Board';
 import { AboutSection } from './components/AboutSection';
 import { loadModel } from './ai/AIController';
-import type { Role } from './game/types';
+import type { Role, MusicalMode } from './game/types';
 
 function App() {
     const {
         snakes,
         gridSize,
-        tick,
-        togglePlay,
         isPlaying,
+        musicalMode,
+        togglePlay,
         setDirection,
         reset,
         togglePlayerType,
         addSnake,
-        removeSnake
+        removeSnake,
+        setMusicalMode,
+        tick
     } = useGameStore();
 
     useEffect(() => { loadModel(); }, []);
@@ -50,7 +52,7 @@ function App() {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [setDirection, snakes]);
+    }, [setDirection, snakes, togglePlay]);
 
     useEffect(() => {
         let interval: number;
@@ -68,6 +70,8 @@ function App() {
         if (index === 1) return "ARROWS";
         return null;
     };
+
+    const modes: MusicalMode[] = ['ARABIC', 'ORCHESTRAL', 'EIGHT_BIT', 'PIANO'];
 
     return (
         <div className="bg-slate-950 min-h-screen">
@@ -106,40 +110,67 @@ function App() {
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-6 z-10 shrink-0 mt-8">
-                    <div className="flex flex-wrap justify-center gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800 max-w-full">
-                        <span className="px-3 py-2 text-slate-500 text-xs font-bold self-center">ADD:</span>
-                        {(['BASS', 'PAD', 'LEAD', 'PERC'] as Role[]).map(role => (
-                            <button
-                                key={role}
-                                onClick={() => addSnake(role)}
-                                className={clsx(
-                                    "whitespace-nowrap px-3 py-2 text-xs font-bold rounded hover:scale-105 transition-all active:scale-95 border border-slate-700",
-                                    role === 'BASS' ? "text-blue-400 hover:bg-blue-900/30" :
-                                        role === 'PAD' ? "text-purple-400 hover:bg-purple-900/30" :
-                                            role === 'LEAD' ? "text-red-400 hover:bg-red-900/30" :
-                                                "text-emerald-400 hover:bg-emerald-900/30"
-                                )}
-                            >
-                                + {role}
-                            </button>
-                        ))}
+                <div className="flex flex-col items-center gap-6 z-10 shrink-0 mt-4">
+                    <div className="flex flex-col gap-4 p-5 bg-slate-900/40 rounded-xl border border-slate-800/60 w-full max-w-xl backdrop-blur-sm">
+
+                        <div className="grid grid-cols-[60px_1fr] items-center gap-4">
+                            <span className="text-slate-500 text-[10px] font-black tracking-widest text-center">MODE</span>
+                            <div className="flex -space-x-px w-full">
+                                {modes.map((mode, idx) => (
+                                    <button
+                                        key={mode}
+                                        onClick={() => setMusicalMode(mode)}
+                                        className={clsx(
+                                            "flex-1 px-2 py-2 text-[10px] font-bold transition-all border border-slate-700 whitespace-nowrap",
+                                            idx === 0 && "rounded-l-md",
+                                            idx === modes.length - 1 && "rounded-r-md",
+                                            musicalMode === mode
+                                                ? "bg-indigo-600 border-indigo-400 text-white z-10 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
+                                                : "bg-slate-900/80 text-slate-500 hover:bg-slate-800 hover:text-slate-300"
+                                        )}
+                                    >
+                                        {mode.replace('_', ' ')}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-[60px_1fr] items-center gap-4">
+                            <span className="text-slate-500 text-[10px] font-black tracking-widest text-center">ADD</span>
+                            <div className="flex gap-2 w-full">
+                                {(['BASS', 'PAD', 'LEAD', 'PERC'] as Role[]).map(role => (
+                                    <button
+                                        key={role}
+                                        onClick={() => addSnake(role)}
+                                        className={clsx(
+                                            "flex-1 whitespace-nowrap px-2 py-2 text-[10px] font-bold rounded-md border border-slate-700 transition-all hover:scale-[1.02] active:scale-95",
+                                            role === 'BASS' ? "text-blue-400 hover:bg-blue-900/30" :
+                                                role === 'PAD' ? "text-purple-400 hover:bg-purple-900/30" :
+                                                    role === 'LEAD' ? "text-red-400 hover:bg-red-900/30" :
+                                                        "text-emerald-400 hover:bg-emerald-900/30"
+                                        )}
+                                    >
+                                        + {role}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="flex gap-4">
-                        <button onClick={togglePlay} className={clsx("px-8 py-3 font-bold rounded shadow-lg transition-all transform hover:scale-105 active:scale-95", isPlaying ? "bg-slate-700 text-slate-300 hover:bg-slate-600" : "bg-white text-slate-900 hover:bg-blue-50")}>
+                        <button onClick={togglePlay} className={clsx("px-8 py-3 text-xs font-black tracking-widest rounded-lg shadow-lg transition-all transform hover:scale-105 active:scale-95", isPlaying ? "bg-slate-800 text-slate-400 border border-slate-700" : "bg-white text-slate-900")}>
                             {isPlaying ? 'STOP ENSEMBLE' : 'START ENSEMBLE'}
                         </button>
-                        <button onClick={reset} className="px-6 py-3 border border-slate-700 text-slate-400 font-bold rounded hover:bg-slate-800 transition">
+                        <button onClick={reset} className="px-6 py-3 text-xs font-black tracking-widest border border-slate-800 text-slate-500 rounded-lg hover:bg-slate-900 hover:text-slate-300 transition">
                             RESET
                         </button>
                     </div>
                 </div>
 
-                <div className="mt-12 mb-4 animate-bounce text-slate-600 flex flex-col items-center gap-2 cursor-pointer shrink-0"
+                <div className="mt-8 mb-4 animate-bounce text-slate-600 flex flex-col items-center gap-2 cursor-pointer shrink-0"
                     onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
-                    <span className="text-xs font-bold tracking-widest uppercase">System Architecture</span>
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span className="text-[10px] font-bold tracking-widest uppercase">System Architecture</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                 </div>
