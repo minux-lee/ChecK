@@ -20,14 +20,15 @@ The system allows multiple instances of the same instrument to run simultaneousl
 
 ## 🎹 Musical Logic Implementation
 
-Each snake acts as an instrument where position `(x, y)` determines the pitch, and the **body length** modulates audio effects.
+Each snake is not just a game object, but an instrument. Position values `(x, y)`, the direction of snake (NEWS), and its length are converted into audio parameters in real-time. There are also other modes you can select.
+`fun void onTick(int beatCount, string mode, int x, int y, string instrument, string dir, int length)`
 
 | Role | Instrument | Description & Effect Modulation | Musical Logic (Formula) |
 |------|------------|---------------------------------|-------------------------|
-| **BASS** | Synth Bass | **Quadrants**: Plays A, C#, and E notes based on the 4 quadrants of the grid. <br> *Effect: Length increases Sustain Gain.* | `Quadrant Check (x < 4, y < 4)` |
-| **PAD** | Ambient Pad | **Harmonic Zoning**: Cycles through 5 dyad chords (A add b9 context) based on the sum of X and Y. <br> *Effect: Length increases Oscillator Detune.* | `Chord Index = (X + Y) % 5` |
-| **LEAD** | Lead Synth | **Arabic Scale**: Plays melody notes from an Arabic scale using diagonal coordinates. <br> *Effect: Length increases Reverb Level.* | `Note = Base + X + (GRID - Y) - 1` |
-| **PERC** | Rhythm | **Parity Rhythm**: Alternates Kick/Snare with Hi-hats based on coordinate parity patterns. <br> *Effect: Length increases Reverb Mix.* | `(X + Y) % 2` & `(X - Y) % 4` |
+| **BASS** | Synth Bass | **Head Direction**: Depending on the direction of the snake's head, the root and fifth of the corresponding chord are played. As the snake gets longer, the sustain gain increases. <br> *Effect: Length increases Sustain Gain.* | `Bass Index = snake.direction_i` |
+| **PAD** | Ambient Pad | **Harmonic Zoning**: Among the chord tones, a total of four different combinations of chord tones are played depending on the value of x + y. The length of the snake connects to the detune level of the union. <br> *Effect: Length increases Oscillator Detune.* | `Chord Index = (x + y) % 4` |
+| **LEAD** | Lead Synth | **Scale of the Mode**: For each mode, notes are played according to the corresponding scale. Occasionally, the rhythm is subdivided during playback. As the snake gets longer, the reverb level increases. <br> *Effect: Length increases Reverb Level.* | `NNote Index = x (, y)` |
+| **PERC** | Rhythm | **Parity Rhythm**: Drum samples are played according to each mode. Depending on the direction of the head, the number of times a closed hi-hat or a triangle is triggered varies. As the snake gets longer, the reverb mix increases. <br> *Effect: Length increases Reverb Mix.* | `#hihat or #triangle = f(snake.direction_i)` |
 
 ## 🧠 AI Architecture: DQN Agent
 
